@@ -13,7 +13,9 @@ namespace UserManagementSystem.ViewModels
 
         [Required,DataType(DataType.Password)]
         public string Password {  get; set; }
-
+        /// <summary>
+        /// 
+        /// </summary>
         [Required,DataType(DataType.Password),Compare("Password")]
         public string ConfirmPassword { get; set;}
     }
