@@ -27,7 +27,14 @@ namespace UserManagementSystem.Controllers
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FullName = model.FullName };
                 var result = await _userManager.CreateAsync(user, model.Password);
-                return RedirectToAction("Login", "Account");
+                if (result.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(user, "User");
+
+                    return RedirectToAction("Login", "Account");
+
+                }
+                
             }
             
                 
