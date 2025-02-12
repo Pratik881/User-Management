@@ -46,6 +46,13 @@
                     </li>
                 }
             </ul>
+            @if (User.IsInRole("Admin"))
+            {
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Admin" asp-action="UserList">Manage Users</a>
+                </li>
+            }
+
 
         </nav>
     </header>

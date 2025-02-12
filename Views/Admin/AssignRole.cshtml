@@ -1,0 +1,28 @@
+﻿@model UserManagementSystem.Models.AssignRoleViewModel
+
+<h2>Assign Role to @Model.UserName</h2>
+
+<form method="post">
+    <input type="hidden" asp-for="UserId" />
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Role</th>
+                <th>Assigned</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Roles.Count; i++)
+            {
+                <tr>
+                    <td>@Model.Roles[i].RoleName</td>
+                    <td>
+                        <input type="checkbox" asp-for="Roles[i].IsAssigned" />
+                        <input type="hidden" asp-for="Roles[i].RoleName" />
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <button type="submit" class="btn btn-success">Save Changes</button>
+</form>
