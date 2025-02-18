@@ -29,9 +29,9 @@ public class DbInitializer
             {
                 UserName = "admin",
                 Email = "admin@example.com",
+                FullName = "Pratik admin",
                 EmailConfirmed = true
             };
-
             var result = await userManager.CreateAsync(adminUser, "SecurePassword123!"); // Use a secure password
 
             if (result.Succeeded)
