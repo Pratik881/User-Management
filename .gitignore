@@ -1,0 +1,9 @@
+﻿# Ignore configuration files with sensitive data
+appsettings.Development.json
+appsettings.json
+
+# Ignore compiled and temporary files
+bin/
+obj/
+*.user
+*.db
