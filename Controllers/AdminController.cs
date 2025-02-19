@@ -36,61 +36,7 @@ namespace UserManagementSystem.Controllers
             return View(users);
         }
 
-        public async Task<IActionResult> AssignRole(string userId)
-        {
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            var roles = _roleManager.Roles.ToList();
-            var userRoles = await _userManager.GetRolesAsync(user);
-
-            var model = new AssignRoleViewModel
-            {
-                UserId = userId,
-                UserName = user.UserName,
-                Roles = roles.Select(role => new RoleModel
-                {
-                    RoleName = role.Name,
-                    IsAssigned = userRoles.Contains(role.Name)
-                }).ToList()
-            };
-
-            return View(model);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> AssignRole(AssignRoleViewModel model)
-        {
-            var user = await _userManager.FindByIdAsync(model.UserId);
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            foreach (var role in model.Roles)
-            {
-                if (role.IsAssigned)
-                {
-                    if (!await _userManager.IsInRoleAsync(user, role.RoleName))
-                    {
-                        await _userManager.AddToRoleAsync(user, role.RoleName);
-                    }
-                }
-                else
-                {
-                    if (await _userManager.IsInRoleAsync(user, role.RoleName))
-                    {
-                        await _userManager.RemoveFromRoleAsync(user, role.RoleName);
-                    }
-                }
-            }
-
-            return RedirectToAction("UserList");
-        }
-
+       
         public async Task<IActionResult> EditUser(string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
@@ -105,7 +51,7 @@ namespace UserManagementSystem.Controllers
             var model = new EditUserViewModel
             {
                 UserId = userId,
-                UserName = user.UserName,
+                FullName= user.FullName,
                 Email = user.Email,
                 AllRoles = allRoles,
                 SelectedRoles = userRoles.ToList()
@@ -123,7 +69,7 @@ namespace UserManagementSystem.Controllers
                 return NotFound();
             }
 
-            user.UserName = model.UserName;
+            user.FullName = model.FullName;
             user.Email = model.Email;
 
             var result = await _userManager.UpdateAsync(user);
@@ -137,13 +83,13 @@ namespace UserManagementSystem.Controllers
             var rolesToRemove = currentRoles.Except(model.SelectedRoles).ToList();
             var rolesToAdd = model.SelectedRoles.Except(currentRoles).ToList();
 
-            // Remove old roles
+           
             foreach (var role in rolesToRemove)
             {
                 await _userManager.RemoveFromRoleAsync(user, role);
             }
 
-            // Add new roles
+           
             foreach (var role in rolesToAdd)
             {
                 await _userManager.AddToRoleAsync(user, role);

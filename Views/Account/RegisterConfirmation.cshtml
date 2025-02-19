@@ -1,0 +1,16 @@
+﻿@{
+    ViewData["Title"] = "Register Confirmation";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<p>
+    Thank you for registering! Please check your email to confirm your account.
+</p>
+
+@if (!string.IsNullOrEmpty(ViewData["Email"]?.ToString()))
+{
+    <p>
+        If you haven't received an email, please check your spam folder or <a asp-action="ResendEmailConfirmation" asp-route-email="@ViewData["Email"]">click here</a> to resend the confirmation email.
+    </p>
+}
