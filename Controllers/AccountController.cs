@@ -90,12 +90,8 @@ namespace UserManagementSystem.Controllers
         {
             if(ModelState.IsValid)
             {
-                var user=await _userManager.FindByEmailAsync(model.Email);
-                if (user == null && ! await _userManager.IsEmailConfirmedAsync(user))
-                    {
-                    ModelState.AddModelError("", "Please confirm your email before logging in.");
-                    return View(model);
-                     }
+                var user = await _userManager.FindByEmailAsync(model.Email);
+
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
                 if (result.Succeeded)
                 {
