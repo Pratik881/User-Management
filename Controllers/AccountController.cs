@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
+using System.Reflection.Metadata.Ecma335;
+using System.Runtime.InteropServices;
 using UserManagementSystem.Data;
 using UserManagementSystem.Services;
 using UserManagementSystem.ViewModels;
@@ -103,7 +105,71 @@ namespace UserManagementSystem.Controllers
             }
             return View(model);
         }
+        public IActionResult ForgetPassword()
+        {
+            return View();
+        }
 
+        [HttpPost]
+        public async Task<IActionResult> ForgetPassword(ForgetPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByEmailAsync(model.Email);
+
+                if (user != null)
+                {
+                    var resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+                    var resetLink = Url.Action("ResetPassword", "Account",
+                        new
+                        {
+                            userId = user.Id,
+                            token = resetToken
+                        },
+                        protocol: HttpContext.Request.Scheme);
+
+                    await _emailSender.SendEmailAsync(user.Email, "Password Reset",
+
+                        $"Click <a href=`{resetLink}`> here </a>  to reset password.");
+                }
+                return View("ForgetPasswordConfirmation");
+
+            }
+            return View(model);
+        }
+
+        public IActionResult ResetPassword(string userId,string token)
+        {
+            if(userId == null || token == null) { return View("Error"); }
+            var model = new ResetPasswordViewModel { UserId = userId,Token = token };
+            return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByIdAsync(model.UserId);
+                if (user == null)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+
+                var result = await _userManager.ResetPasswordAsync(user, model.Token, model.Password);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Login", "Account");
+                }
+                foreach(var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+
+                }
+
+            }
+            return View(model);
+        }
 
         public async Task<IActionResult> Logout()
         {

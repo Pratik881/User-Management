@@ -4,7 +4,7 @@ namespace UserManagementSystem.ViewModels
 {
     public class ForgetPasswordViewModel
     {
-        [Required]
-        public string email;
+        [Required, EmailAddress]
+        public string Email { get; set; }
     }
 }
