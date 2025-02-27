@@ -1,0 +1,51 @@
+﻿@{
+    ViewData["Title"] = "Documents";
+}
+
+<h2>My Documents</h2>
+
+@if (User.Identity.IsAuthenticated)
+{
+    <!-- Button to create a new document -->
+    <button id="createDocBtn" class="btn btn-primary">Create New Document</button>
+
+    <!-- Hidden input field and save button -->
+    <div id="documentForm" style="display: none; margin-top: 10px;">
+        <input type="text" id="documentTitle" class="form-control" placeholder="Enter document title">
+        <button id="saveDocBtn" class="btn btn-success" style="margin-top: 5px;">Save</button>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        // Show input field when "Create New Document" is clicked
+        document.getElementById("createDocBtn")?.addEventListener("click", function () {
+            document.getElementById("documentForm").style.display = "block";
+        });
+
+        // When "Save" is clicked, send the document title to the server
+        document.getElementById("saveDocBtn")?.addEventListener("click", function () {
+            var title = document.getElementById("documentTitle").value;
+
+            if (title.trim() === "") {
+                alert("Please enter a document title.");
+                return;
+            }
+
+            // Send request to the backend
+            fetch('/Document/CreateDocument', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ title: title })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert("Document created successfully!");
+                    location.reload(); // Reload to show the new document
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+}
