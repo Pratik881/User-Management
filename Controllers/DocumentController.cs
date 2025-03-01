@@ -47,7 +47,7 @@ namespace UserManagementSystem.Controllers
             _context.Documents.Add(newDocument);
             await _context.SaveChangesAsync();
 
-            return Json(new { success = true, message = "Document created successfully!" });
+            return Json(new { success = true, message = "Document has been screated successfully!" });
         }
     }
 }
