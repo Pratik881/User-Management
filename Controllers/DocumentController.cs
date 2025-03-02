@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
 using UserManagementSystem.Data;
@@ -24,6 +25,17 @@ namespace UserManagementSystem.Controllers
         {
             return View();
         }
+        [HttpGet]
+        public async Task<IActionResult> GetDocuments()
+        {
+            var userId = _userManager.GetUserId(User);
+            var documents = await _context.Documents
+                .Where(d => d.OwnerId == userId)
+                .ToListAsync();
+
+            return Json(documents);
+        }
+
 
         // Action to handle document creation
         [HttpPost]
@@ -47,7 +59,7 @@ namespace UserManagementSystem.Controllers
             _context.Documents.Add(newDocument);
             await _context.SaveChangesAsync();
 
-            return Json(new { success = true, message = "Document has been screated successfully!" });
+            return Json(new { success = true, message = "Document has been created successfully!" });
         }
     }
 }
