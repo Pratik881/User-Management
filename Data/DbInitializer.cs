@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using UserManagementSystem.Data;
 
 public class DbInitializer
@@ -6,9 +7,10 @@ public class DbInitializer
     public static async Task Initialize(IServiceProvider serviceProvider, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
     {
         var context = serviceProvider.GetRequiredService<ApplicationDbContext>();
-        context.Database.EnsureCreated(); 
 
-        
+        // Apply migrations instead of EnsureCreated()
+         context.Database.Migrate();
+
         var roleNames = new[] { "Admin", "User" };
 
         foreach (var roleName in roleNames)

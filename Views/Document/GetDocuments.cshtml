@@ -1,0 +1,37 @@
+﻿@model List<Document>
+
+@{
+    ViewData["Title"] = "My Documents";
+}
+
+<h2>My Documents</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Content</th>
+            <th>Id</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var doc in Model)
+        {
+            <tr>
+                <td>@doc.Title</td>z
+                <td>@doc.Content</td>
+                <td>@doc.Id</td>
+                <td>
+                    <a asp-action="GetDocument" asp-route-id="@doc.Id" class="btn btn-primary">View</a>
+                    <a asp-action="EditDocument" asp-route-ToEdit="@doc.Id" class="btn btn-warning">Edit</a>
+
+                    @if (doc.IsOwner)
+                    {
+                        
+                        <a asp-action="DeleteDocument" asp-route-documentId="@doc.Id" class="btn btn-danger">Delete</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,24 @@
+﻿@model Document
+
+@{
+	ViewData["title"] = "Edit document";
+}
+
+<h3>Edit Document</h3>
+
+<form asp-action="EditDocument" method="post">
+	<input type="hidden" asp-for="Id" />
+
+	<div class="form-group">
+		<label asp-for="Title"></label>
+		<input asp-for="Title"  class="form-control"/>
+	</div>
+
+	<div class="form-group">
+		<label asp-for="Content"></label>
+		<textarea asp-for="Content" class="form-control"></textarea>
+	</div>
+
+	<button type="submit" class="btn btn-primary">Save</button>
+	<a asp-action="GetDocuments" class="btn btn-secondary">Cancel</a>
+</form>

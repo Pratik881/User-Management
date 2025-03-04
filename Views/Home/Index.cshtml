@@ -1,1 +1,14 @@
-﻿
+﻿@{
+	ViewData["Title"] = "Home";
+}
+
+@if (User.Identity.IsAuthenticated)
+{
+	{
+		@Html.Partial("~/Views/Document/Documents.cshtml");
+	}
+}
+else
+{
+	
+}
